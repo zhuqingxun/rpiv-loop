@@ -41,7 +41,7 @@ description: 分析实施与计划的对比，以改进流程
 
 **计划命令：**
 阅读此内容以了解规划流程和指导计划创建的指令。
-${CLAUDE_PLUGIN_ROOT}/commands/rpiv_loop/plan-feature.md
+.claude/commands/rpiv_loop/plan-feature.md
 
 **生成的计划：**
 阅读此内容以了解代理应该做什么。
@@ -49,7 +49,7 @@ ${CLAUDE_PLUGIN_ROOT}/commands/rpiv_loop/plan-feature.md
 
 **执行命令：**
 阅读此内容以了解执行流程和指导实施的指令。
-${CLAUDE_PLUGIN_ROOT}/commands/rpiv_loop/execute.md
+.claude/commands/rpiv_loop/execute.md
 
 **执行报告：**
 阅读此内容以了解代理实际做了什么以及原因。
