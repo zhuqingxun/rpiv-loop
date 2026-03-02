@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "rpiv-loop",
+  "owner": {
+    "name": "zqx"
+  },
+  "metadata": {
+    "description": "RPIV 四阶段开发流程插件市场"
+  },
+  "plugins": [
+    {
+      "name": "rpiv-loop",
+      "source": "./",
+      "description": "RPIV 四阶段开发流程（需求→计划→实施→验证），提供结构化、可追溯的功能开发工作流",
+      "version": "1.0.0",
+      "author": {
+        "name": "zqx"
+      },
+      "repository": "https://github.com/zhuqingxun/rpiv-loop",
+      "keywords": ["rpiv", "workflow", "development-process", "code-review"]
+    }
+  ]
+}
