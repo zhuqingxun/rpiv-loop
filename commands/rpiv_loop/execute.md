@@ -125,8 +125,13 @@ argument-hint: [path-to-plan]
 1. 更新计划文件的 frontmatter：
    - status 从 `in-progress` 改为 `completed`
    - 更新 `updated_at` 时间戳为当前时间
-2. 提示用户："执行已完成。计划文件已标记为完成。"
-3. 建议下一步："建议 `/clear` 后执行验证流程：`/rpiv_loop:validation:code-review` → `/rpiv_loop:validation:execution-report` → `/rpiv_loop:validation:system-review`"
+2. **执行经验提取**（自包含，不依赖外部技能）：
+   - 回溯本次执行中所有失败的工具调用（Bash 报错、文件编辑冲突等）
+   - 对每个失败，判断：是一次性问题（环境、网络）还是暴露了可复用的模式（编码规范、框架用法、项目约定）？
+   - 如果发现可复用的模式，在输出报告的"建议"章节中明确建议更新哪个文件（项目 CLAUDE.md / 计划模板 / 其他）
+   - 这一步不超过 2 分钟，不要过度分析
+3. 提示用户："执行已完成。计划文件已标记为完成。"
+4. 建议下一步："建议 `/clear` 后执行验证流程：`/rpiv_loop:validation:code-review` → `/rpiv_loop:validation:execution-report` → `/rpiv_loop:validation:system-review`"
 
 ## 备注
 
