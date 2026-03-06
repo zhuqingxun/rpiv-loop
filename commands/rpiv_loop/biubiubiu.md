@@ -106,8 +106,8 @@ TeamCreate:
 - **阶段 1**：读取需求摘要文件 `{brainstorm-summary-path}`，将其 `status` 更新为 `in-progress`。按照 RPIV create-prd 规范创建 PRD → `rpiv/requirements/prd-{feature-name}.md`。PRD 创建完成后，将需求摘要的 `status` 更新为 `completed`。PRD 规范参考读取 `C:\Users\zqx\.claude\commands\rpiv_loop\create-prd.md`
 - **阶段 2**：等待 tech-research 任务完成（通过 TaskList 检查），然后按照 RPIV plan-feature 规范创建实施计划 → `rpiv/plans/plan-{feature-name}.md`。计划规范参考读取 `C:\Users\zqx\.claude\commands\rpiv_loop\plan-feature.md`。代码库分析要做充分，计划要足够详细，让 Dev agent 无需额外调研就能实现
 - **阶段 4**：对比实现代码与计划，检查是否有偏离或遗漏，将审查结果通过 SendMessage 发给 team leader
-- 完成每个任务后用 TaskUpdate 标记 completed，然后 TaskList 找下一个任务
-- **Frontmatter 同步（强制）**：创建或完成 `rpiv/` 目录下的 .md 文件时，必须将 frontmatter 的 `status` 更新为当前实际状态（如 completed），并更新 `updated_at` 为当前时间戳
+- **完成任务的固定顺序**：标记 TaskUpdate completed 之前，必须先 Edit 对应的 `rpiv/` 文件，将 frontmatter `status` 更新为 `completed`、`updated_at` 更新为当前时间戳。顺序：Edit frontmatter → TaskUpdate completed，不可颠倒
+- 完成每个任务后 TaskList 找下一个任务
 - 遇到需要决策时自主决定，在文档中记录理由
 - 全程使用中文
 
@@ -138,8 +138,7 @@ TeamCreate:
 - **阶段 4**：运行测试 + 代码审查。测试全部通过后，将 test-strategy 和 test-specs 的 status 更新为 `completed`。代码审查规范参考读取 `C:\Users\zqx\.claude\commands\rpiv_loop\validation\code-review.md`。审查报告保存到 `rpiv/validation/code-review-{feature-name}.md`
 - 审查标准要苛刻：安全问题标记为 CRITICAL，每个问题精确到文件和行号
 - 如果发现 critical/high 问题，通过 SendMessage 立即告知 team leader
-- 完成每个任务后用 TaskUpdate 标记 completed，然后 TaskList 找下一个任务
-- **Frontmatter 同步（强制）**：创建或完成 `rpiv/` 目录下的 .md 文件时，必须将 frontmatter 的 `status` 更新为当前实际状态（如 completed），并更新 `updated_at` 为当前时间戳
+- **完成任务的固定顺序**：标记 TaskUpdate completed 之前，必须先 Edit 对应的 `rpiv/` 文件，将 frontmatter `status` 更新为 `completed`、`updated_at` 更新为当前时间戳。顺序：Edit frontmatter → TaskUpdate completed，不可颠倒
 - 全程使用中文
 
 **第二批（阶段 3 开始时启动）：**
@@ -164,8 +163,7 @@ TeamCreate:
 - 遵循项目 CLAUDE.md 中的编码规范
 - 每完成一个子任务运行基本语法验证
 - 遇到计划不明确的地方，通过 SendMessage 询问 team leader
-- 完成后用 TaskUpdate 标记 implement 任务完成
-- **Frontmatter 同步（强制）**：如果修改了 `rpiv/` 目录下的 .md 文件，必须同步更新 frontmatter 的 `status` 和 `updated_at`
+- **完成任务的固定顺序**：如果任务涉及 `rpiv/` 目录下的 .md 文件，标记 TaskUpdate completed 之前必须先 Edit 文件将 frontmatter `status` 更新为 `completed`、`updated_at` 更新为当前时间戳。顺序：Edit frontmatter → TaskUpdate completed，不可颠倒
 - 全程使用中文
 
 ### 步骤 5：阶段协调
@@ -176,7 +174,7 @@ TeamCreate:
 
 Architect 完成 create-prd 后：
 - 快速读取 PRD，检查是否覆盖需求摘要中的所有核心场景
-- **Frontmatter 校验**：确认 PRD 文件 frontmatter 存在且 status 已更新，brainstorm-summary 的 status 已更新为 completed。如未更新，SendMessage 要求 Architect 补充
+- **Frontmatter 校验（grep 验证）**：用 `grep ^status:` 检查 PRD 文件和 brainstorm-summary 文件的 frontmatter status。如果 status 未更新为 `completed`，Leader 直接 Edit 修复（不要 SendMessage 要求 agent 补充，减少往返）
 - 重大遗漏 → SendMessage 要求 Architect 补充
 - 通过 → Architect 可进入 Plan 阶段
 
@@ -184,6 +182,7 @@ Architect 完成 create-prd 后：
 
 Architect 完成 create-plan 后：
 - 检查计划包含：上下文参考、逐步任务、测试策略、验证命令
+- **Frontmatter 校验（grep 验证）**：用 `grep ^status:` 检查 Plan 文件和 research 文件的 frontmatter status。如果 status 未更新为 `completed`，Leader 直接 Edit 修复
 - **框架方案检查**：确认计划中是否优先使用了框架内置能力（而非自研）。如果计划选择自研而调研报告未充分证明框架不支持，要求 Architect 补充论证
 - 确定 Dev agent 数量和文件分工
 - **多人协作检查**：如果项目有多个贡献者，先 `git fetch` 检查远程是否已有相关变更，避免重复实现
@@ -255,7 +254,21 @@ related_files:
 ```
 
 2. **关闭团队**：对所有 agent 发送 `shutdown_request`，等待确认后 `TeamDelete`
-3. **向用户报告**：输出交付物清单和关键信息摘要
+3. **归档过程文件**：将本次流程产生的所有 `rpiv/` 过程文件归档到 `rpiv/archive/`。具体操作：
+   - 创建 `rpiv/archive/` 目录（如不存在）
+   - 遍历以下文件（如存在）：
+     - `rpiv/brainstorm-summary-{feature-name}.md`
+     - `rpiv/research-{feature-name}.md`
+     - `rpiv/requirements/prd-{feature-name}.md`
+     - `rpiv/plans/plan-{feature-name}.md`
+     - `rpiv/validation/test-strategy-{feature-name}.md`
+     - `rpiv/validation/test-specs-{feature-name}.md`
+     - `rpiv/validation/code-review-{feature-name}.md`
+     - `rpiv/validation/delivery-report-{feature-name}.md`
+   - 对每个文件：Edit frontmatter 将 `status` 改为 `archived`，添加 `archived_at` 时间戳，更新 `updated_at`
+   - 移动文件到 `rpiv/archive/`（如有同名文件则加时间戳后缀）
+   - 输出归档清单
+4. **向用户报告**：输出交付物清单和关键信息摘要
 
 ## 异常处理
 
