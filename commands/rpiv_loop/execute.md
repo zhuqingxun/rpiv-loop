@@ -17,9 +17,11 @@ argument-hint: [path-to-plan]
 
 1. 读取计划文件路径：`$ARGUMENTS`
 2. 检查计划文件是否有 YAML frontmatter
-3. 如果有 frontmatter：
-   - 更新 status 从 `pending` 到 `in-progress`
-   - 更新 `updated_at` 时间戳为当前时间
+3. 如果有 frontmatter，根据当前 status 处理：
+   - `pending` → 更新为 `in-progress`，更新 `updated_at`
+   - `in-progress` → **可能是上次会话中断**。使用 AskUserQuestion 询问用户：① 继续执行（保持 in-progress）② 重新开始（更新 `updated_at`）
+   - `completed` → 提示"此计划已执行完成"，询问用户是否需要重新执行
+   - `superseded` → 提示"此计划已被新版本取代"，建议执行新版本
 4. 如果没有 frontmatter（旧文件），跳过状态更新
 
 ### 1. 阅读和理解

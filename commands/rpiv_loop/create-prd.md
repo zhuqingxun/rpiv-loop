@@ -166,13 +166,28 @@ archived_at: null
 - **具体性：** 优先使用具体示例而非抽象描述
 - **长度：** 全面但可扫描（通常 30-60 个章节的内容）
 
+## 前置检查
+
+**在开始编写 PRD 之前：**
+
+1. **版本替代检查**：检查 `rpiv/requirements/` 下是否存在同名特性的旧版本 PRD（如当前要创建 `prd-{name}-v2.md`，而 `prd-{name}.md` 已存在）。如果存在旧版本且状态不是 `superseded` 或 `archived`：
+   - 使用 AskUserQuestion 询问用户是否将旧版本标记为 `superseded`
+   - 如果确认，更新旧文件 frontmatter：`status: superseded`，追加 `superseded_by: rpiv/requirements/prd-{new-name}.md`，更新 `updated_at`
+
+2. **识别 brainstorm-summary 来源**：检查对话上下文中是否引用了 `rpiv/brainstorm-summary-*.md` 文件。如果有，记录其路径，用于 PRD 完成后回写状态。
+
+3. **识别 todo 来源**：如果用户通过 `--from-todo <path>` 参数指定了来源 todo 文件，或对话上下文中明确引用了 `rpiv/todo/feature-*.md` 文件，记录其路径，用于 PRD 完成后回写状态。
+
 ## 输出确认
 
 创建 PRD 后：
 1. 确认写入的文件路径
 2. 提供 PRD 内容的简要摘要
 3. 突出显示由于缺少信息而做出的任何假设
-4. 建议后续步骤：
+4. **更新上游文件状态**：
+   - 如果在前置检查中识别到 brainstorm-summary 来源文件，将其 status 更新为 `completed`，更新 `updated_at`
+   - 如果识别到 todo 来源文件，将其 status 更新为 `completed`，更新 `updated_at`，并在 todo 文件末尾追加 `promoted_to: rpiv/requirements/prd-{feature-name}.md`
+5. 建议后续步骤：
    - "PRD 已生成。下一步建议：`/clear` 后执行 `/rpiv_loop:plan-feature {feature-name}` 创建实施计划。"
 
 ## 备注

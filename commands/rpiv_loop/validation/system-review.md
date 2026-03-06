@@ -25,15 +25,13 @@ description: 分析实施与计划的对比，以改进流程
 
 ## 前置处理
 
-**在开始审查前管理文件状态：**
+**在开始审查前：**
 
 1. 读取计划文件路径：$1
 2. 读取执行报告路径：$2
 3. 查找相关的 code-review 文件：`rpiv/validation/code-review-{同名}.md`
-4. 对于这些文件，如果有 YAML frontmatter：
-   - 更新它们的 status 为 `in-progress`
-   - 更新 `updated_at` 时间戳
-5. 如果文件没有 frontmatter（旧文件），跳过状态更新
+4. 读取上述文件的 frontmatter，记录当前状态供后续分析
+5. **不修改**这些文件的 status — 它们由各自的上游技能负责管理（参见 `references/frontmatter-spec.md` 职责表）
 
 ## 上下文和输入
 
@@ -229,14 +227,15 @@ root_cause: [计划不明确 | 缺少上下文 | 等]
 
 **审查完成后：**
 
-1. 更新所有相关文件的 status 为 `completed`：
-   - 计划文件（$1）
-   - 执行报告（$2）
-   - 代码审查文件（如果存在）
-   - 当前系统审查文件
-2. 更新这些文件的 `updated_at` 时间戳
-3. 提示用户："系统审查完成。以下文件已标记为完成，建议使用 /rpiv_loop:archive {feature-name} 批量归档："
-   - 列出所有相关文件及其路径
+1. 更新以下文件的 status 为 `completed`，并更新 `updated_at`（参见 `references/frontmatter-spec.md` 职责表）：
+   - 执行报告（$2）— 由本技能负责关闭
+   - 当前系统审查文件 — 自己关闭自己
+2. **一致性校验**（只检查，不修改）：
+   - 检查计划文件（$1）是否已为 `completed`（应由 execute 负责）
+   - 检查代码审查文件是否已为 `completed`（应由 code-review-fix 负责）
+   - 如果发现未 completed 的文件，在审查报告的"系统改进行动"中记录为状态异常，提醒用户处理
+3. 提示用户："系统审查完成。建议使用 `/rpiv_loop:archive {feature-name}` 批量归档。"
+   - 列出所有相关文件及其路径和当前状态
 
 ## 重要提示
 

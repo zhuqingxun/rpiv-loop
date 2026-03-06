@@ -24,13 +24,14 @@ argument-hint: [all|feature-name|file-path]
 
 ### 模式 1: 归档所有已完成文件 (`/archive all`)
 
-1. 扫描以下目录的所有 .md 文件:
+1. 扫描以下位置的所有 .md 文件:
    - `rpiv/requirements/`
    - `rpiv/plans/`
    - `rpiv/validation/`
    - `rpiv/todo/`
+   - `rpiv/` 根目录下匹配 `brainstorm-summary-*.md` 和 `research-*.md` 的辅助文件
 2. 读取每个文件的 frontmatter
-3. 筛选出 status=completed 的文件
+3. 筛选出 status=completed 或 status=superseded 的文件
 4. 对每个文件执行归档操作(见下方)
 5. 生成归档报告
 

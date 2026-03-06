@@ -24,10 +24,17 @@ argument-hint: [all|pending|in-progress|completed|feature-name|check|fix]
 
 ### 数据采集（所有模式共用）
 
-1. 扫描 `rpiv/requirements/`、`rpiv/plans/`、`rpiv/validation/`、`rpiv/todo/` 的 .md 文件
+1. 扫描以下位置的 .md 文件：
+   - `rpiv/requirements/`、`rpiv/plans/`、`rpiv/validation/`、`rpiv/todo/`
+   - `rpiv/` 根目录下匹配 `brainstorm-summary-*.md` 和 `research-*.md` 的辅助文件
 2. 读取 frontmatter 的 status, type, created_at, updated_at, related_files（todo 使用 title 字段）
-3. 从文件名提取名称（去掉 `prd-`/`plan-`/`code-review-`/`exec-report-`/`system-review-` 前缀；todo 文件去掉 `issue-`/`feature-`/`todo-` 前缀）
+3. 从文件名提取名称（去掉 `prd-`/`plan-`/`code-review-`/`exec-report-`/`system-review-`/`brainstorm-summary-`/`research-` 前缀；todo 文件去掉 `issue-`/`feature-`/`todo-` 前缀）
 4. 扫描 `rpiv/archive/` 统计已归档文件数
+5. **Status 值合法性校验**（参见 `references/frontmatter-spec.md`）：
+   - 流程文件允许：`pending` / `in-progress` / `completed` / `superseded` / `archived`
+   - Todo 文件允许：`open` / `in-progress` / `completed`
+   - 辅助文件允许：`pending` / `completed`
+   - 不合法的值（如 `in_progress`、`delivered`、空值）标记为异常
 
 ### 模式 0: 精简摘要（无参数,默认）
 
@@ -134,7 +141,12 @@ argument-hint: [all|pending|in-progress|completed|feature-name|check|fix]
 |------|----------|
 | Plan 为 completed 或 in-progress | 关联的 PRD 应为 completed |
 | Validation 文件为 completed | 关联的 Plan 应为 completed |
-| 文件状态为 in-progress 超过 48 小时 | 警告: 可能遗留 |
+| 文件状态为 in-progress 超过 48 小时 | 警告: 可能是会话中断导致的悬停 |
+| Status 值不在合法枚举内 | 异常: 非标准状态值，需修正 |
+| 同一特性存在 V1 和 V2 文件且 V1 非 superseded/archived | 异常: 版本替代未处理 |
+| brainstorm-summary 存在但无对应 PRD | 提示: 需求摘要未推进 |
+| todo status=completed 但无对应的修复记录或 PRD | 警告: 完成标记可能不准确 |
+| exec-report 存在但 Plan 不是 completed | 异常: 执行报告先于计划完成 |
 
 输出: 仅列出异常项,无异常则输出 `✓ 全部一致,无异常`
 
@@ -149,4 +161,6 @@ argument-hint: [all|pending|in-progress|completed|feature-name|check|fix]
 - 只扫描 .md 文件,不递归子目录
 - 不缓存,每次实时读取
 - 按 updated_at 降序排列
-- 状态符号: ⏳ pending, 🔄 in-progress, ✓ completed, 📦 archived
+- 状态符号: ⏳ pending, 🔄 in-progress, ✓ completed, ⏪ superseded, 📦 archived
+- 辅助文件（brainstorm-summary、research）在精简摘要中归入独立的"📝 辅助文件"区块显示
+- Status 合法性规则参见 `references/frontmatter-spec.md`

@@ -71,7 +71,7 @@ argument-hint: [描述，可选]
    | 类型 | 后续建议 |
    |------|---------|
    | `issue` | `/rpiv_loop:fix rpiv/todo/{name}.md` 立即修复 |
-   | `feature` | `/rpiv_loop:brainstorm` 深入讨论，或 `/rpiv_loop:create-prd` 直接写 PRD |
+   | `feature` | `/rpiv_loop:brainstorm` 深入讨论，或 `/rpiv_loop:create-prd --from-todo rpiv/todo/{name}.md` 直接写 PRD |
    | `todo` | `/rpiv_loop:fix rpiv/todo/{name}.md` 直接执行 |
 
 3. 通用提示：可通过 `/rpiv_loop:flow-status` 查看所有条目状态

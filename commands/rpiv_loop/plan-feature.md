@@ -24,10 +24,16 @@ description: "通过深入的代码库分析和研究创建全面的功能计划
 2. 如果存在相关 PRD：
    - 读取该 PRD 文件内容
    - 检查是否有 YAML frontmatter
-   - 如果有 frontmatter 且 status 为 `pending`，更新为 `in-progress`
-   - 更新 `updated_at` 时间戳
+   - 根据 PRD 当前 status 处理：
+     - `pending` → 更新为 `in-progress`，更新 `updated_at`
+     - `in-progress` → **可能是上次会话中断**。提示用户但继续执行（Plan 创建完成后仍会将 PRD 标记为 completed）
+     - `completed` → PRD 已完成，正常继续
+     - `superseded` → 警告用户此 PRD 已被取代，询问是否仍要基于它创建 Plan
    - 记录 PRD 文件路径，用于后续 related_files
 3. 如果没有 frontmatter（旧文件），跳过状态更新
+4. **版本替代检查**：检查是否存在同名特性的旧版本文件（如当前要创建 `plan-{name}-v2.md`，而 `plan-{name}.md` 已存在）。如果存在旧版本且状态不是 `superseded` 或 `archived`：
+   - 使用 AskUserQuestion 询问用户是否将旧版本标记为 `superseded`
+   - 如果确认，更新旧文件 frontmatter：`status: superseded`，追加 `superseded_by: {新文件路径}`，更新 `updated_at`
 
 ### 阶段 1：功能理解
 

@@ -28,7 +28,7 @@ description: 为系统审查生成实施报告
 ```markdown
 ---
 description: "执行报告: {feature-name}"
-status: pending
+status: completed
 created_at: {YYYY-MM-DDTHH:MM:SS}
 updated_at: {YYYY-MM-DDTHH:MM:SS}
 archived_at: null
@@ -43,7 +43,7 @@ related_files:
 
 **Frontmatter 字段说明：**
 - `description`: 文件描述
-- `status`: 文件状态，新创建时固定为 `pending`
+- `status`: 执行报告是事实记录，创建完成即为 `completed`
 - `created_at`: 创建时间戳，ISO 8601 格式
 - `updated_at`: 更新时间戳，创建时与 created_at 相同
 - `archived_at`: 归档时间戳，创建时固定为 `null`
