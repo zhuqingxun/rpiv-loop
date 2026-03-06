@@ -28,7 +28,7 @@ argument-hint: [all|pending|in-progress|completed|feature-name|check|fix]
    - `rpiv/requirements/`、`rpiv/plans/`、`rpiv/validation/`、`rpiv/todo/`
    - `rpiv/` 根目录下匹配 `brainstorm-summary-*.md` 和 `research-*.md` 的辅助文件
 2. 读取 frontmatter 的 status, type, created_at, updated_at, related_files（todo 使用 title 字段）
-3. 从文件名提取名称（去掉 `prd-`/`plan-`/`code-review-`/`exec-report-`/`system-review-`/`brainstorm-summary-`/`research-` 前缀；todo 文件去掉 `issue-`/`feature-`/`todo-` 前缀）
+3. 从文件名提取名称（去掉 `prd-`/`plan-`/`code-review-`/`exec-report-`/`system-review-`/`delivery-report-`/`test-strategy-`/`test-specs-`/`brainstorm-summary-`/`research-` 前缀；todo 文件去掉 `issue-`/`feature-`/`todo-` 前缀）
 4. 扫描 `rpiv/archive/` 统计已归档文件数
 5. **Status 值合法性校验**（参见 `references/frontmatter-spec.md`）：
    - 流程文件允许：`pending` / `in-progress` / `completed` / `superseded` / `archived`
@@ -89,11 +89,11 @@ argument-hint: [all|pending|in-progress|completed|feature-name|check|fix]
 ```
 ## 全部特性状态
 
-| 特性 | PRD | Plan | Review | Exec | System | 状态 |
-|------|-----|------|--------|------|--------|------|
-| tray-flash-notification | ✓ | ✓ | — | — | — | 可归档 |
-| user-auth | ✓ | 🔄 | — | — | — | 进行中 |
-| new-feature | ⏳ | — | — | — | — | 待处理 |
+| 特性 | PRD | Plan | Review | Exec | System | Delivery | 状态 |
+|------|-----|------|--------|------|--------|----------|------|
+| tray-flash-notification | ✓ | ✓ | — | — | — | — | 可归档 |
+| user-auth | ✓ | 🔄 | — | — | — | — | 进行中 |
+| new-feature | ⏳ | — | — | — | — | — | 待处理 |
 
 📦 已归档: smile-msg (PRD + Plan)
 
@@ -124,9 +124,14 @@ argument-hint: [all|pending|in-progress|completed|feature-name|check|fix]
 
 | 阶段 | 文件 | 状态 | 创建 | 更新 |
 |------|------|------|------|------|
+| Brainstorm | brainstorm-summary-user-auth.md | ✓ | 01-24 14:00 | 01-25 09:00 |
+| Research | research-user-auth.md | ✓ | 01-24 15:00 | 01-25 08:00 |
 | PRD | prd-user-auth.md | ✓ | 01-25 10:00 | 01-26 16:00 |
 | Plan | plan-user-auth.md | ✓ | 01-26 10:00 | 01-27 14:00 |
-| Review | code-review-user-auth.md | ✓ | 01-27 15:00 | 01-27 16:00 |
+| Exec Report | exec-report-user-auth.md | ✓ | 01-27 14:30 | 01-27 15:00 |
+| Code Review | code-review-user-auth.md | ✓ | 01-27 15:00 | 01-27 16:00 |
+| System Review | system-review-user-auth.md | ✓ | 01-27 16:00 | 01-27 16:30 |
+| Delivery | delivery-report-user-auth.md | ✓ | 01-27 17:00 | 01-27 17:00 |
 
 ✓ 状态一致性检查通过
 

@@ -37,12 +37,15 @@ argument-hint: [all|feature-name|file-path]
 
 ### 模式 2: 归档特性相关文件 (`/archive feature-name`)
 
-1. 在以下目录查找匹配 `*-{feature-name}.md` 的文件:
+1. 在以下位置查找匹配 `*-{feature-name}.md` 的文件:
    - `rpiv/requirements/prd-{feature-name}.md`
    - `rpiv/plans/plan-{feature-name}.md`
    - `rpiv/validation/*-{feature-name}.md`
+   - `rpiv/brainstorm-summary-{feature-name}.md`（辅助文件）
+   - `rpiv/research-{feature-name}.md`（辅助文件）
+   - `rpiv/todo/*-{feature-name}.md`（todo 文件）
 2. 读取每个文件的 frontmatter
-3. 筛选出 status=completed 的文件
+3. 筛选出 status=completed 或 status=superseded 的文件
 4. 对每个文件执行归档操作(见下方)
 5. 如果某些文件 status 不是 completed,报告警告
 6. 生成归档报告

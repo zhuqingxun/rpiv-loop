@@ -44,7 +44,7 @@
 | system-review | — | system-review 自身 | 自己关闭自己 |
 | test-strategy | — | biubiubiu QA / 手动标记 | QA 测试完成后 |
 | test-specs | — | biubiubiu QA / 手动标记 | QA 测试完成后 |
-| delivery-report | — | 创建时即 completed | biubiubiu |
+| delivery-report | — | 创建时即 completed | delivery-report / biubiubiu |
 | brainstorm-summary | — | create-prd / biubiubiu | 消费后标记 |
 | research | — | biubiubiu Research | 调研完成后标记 |
 | todo | fix | fix | fix 全权 |
