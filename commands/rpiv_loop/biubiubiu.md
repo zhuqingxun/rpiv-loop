@@ -217,7 +217,15 @@ Architect 完成 create-plan 后：
 
 ### 步骤 6：完成交付
 
-所有验证通过后：
+所有验证通过后，**先输出以下 checklist，然后逐项执行并勾选**（防止中间步骤被团队关闭等交互流程冲断）：
+
+```
+交付 checklist：
+- [ ] 6.1 生成交付报告
+- [ ] 6.2 关闭团队
+- [ ] 6.3 归档过程文件
+- [ ] 6.4 向用户报告
+```
 
 1. **生成交付报告**保存到 `rpiv/validation/delivery-report-{feature-name}.md`：
 
@@ -257,6 +265,7 @@ related_files:
 3. **归档过程文件**：将本次流程产生的所有 `rpiv/` 过程文件归档到 `rpiv/archive/`。具体操作：
    - 创建 `rpiv/archive/` 目录（如不存在）
    - 遍历以下文件（如存在）：
+     - `rpiv/todo/*{feature-name}*.md`
      - `rpiv/brainstorm-summary-{feature-name}.md`
      - `rpiv/research-{feature-name}.md`
      - `rpiv/requirements/prd-{feature-name}.md`
