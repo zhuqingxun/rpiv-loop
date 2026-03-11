@@ -1,6 +1,6 @@
 {
   "name": "rpiv-loop",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "RPIV 四阶段开发流程（需求→计划→实施→验证），提供结构化、可追溯的功能开发工作流",
   "author": {
     "name": "zqx"

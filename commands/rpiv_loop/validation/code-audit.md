@@ -237,3 +237,50 @@ blast_radius: |
   - 50-74：可能是问题，但也可能有合理理由
   - 0-49：不确定，可能是误报
 - 输出报告兼容 `code-review-fix` 流程（`status: open` 字段），修复时使用 `/rpiv_loop:validation:code-review-fix`
+
+## Deferred 问题跟踪文件
+
+当审计报告中的 critical/high 问题被标记为 deferred 时，必须在 `rpiv/todo/` 中创建对应的跟踪文件。文件格式**必须遵循 `record` 技能的标准模板**：
+
+```markdown
+---
+title: "{问题标题}（审计 {ID}）"
+type: issue
+status: open
+priority: high|medium
+source: rpiv/validation/{audit-report-name}.md#{ID}
+created_at: {YYYY-MM-DDTHH:MM:SS}
+updated_at: {YYYY-MM-DDTHH:MM:SS}
+---
+
+# {问题标题}
+
+## 问题现象
+
+{从审计报告中提取的问题描述}
+
+## 根本原因
+
+{如果审计已分析出原因则填写，否则写"待分析"}
+
+## 影响范围
+
+{受影响的文件和模块}
+
+## 已知 Workaround
+
+{如果有临时解决方案则填写，否则写"无"}
+
+## 已尝试的方案
+
+无
+
+## 参考
+
+- 审计报告：{source 路径}
+```
+
+**关键要求**：
+- 必须使用 `title`（不是 `description`）
+- 必须包含 `type: issue`
+- 文件名格式：`rpiv/todo/fix-{kebab-case-name}.md`
