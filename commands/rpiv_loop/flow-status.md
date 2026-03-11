@@ -151,6 +151,7 @@ argument-hint: [all|pending|in-progress|completed|feature-name|check|fix]
 | 同一特性存在 V1 和 V2 文件且 V1 非 superseded/archived | 异常: 版本替代未处理 |
 | brainstorm-summary 存在但无对应 PRD | 提示: 需求摘要未推进 |
 | todo status=completed 但无对应的修复记录或 PRD | 警告: 完成标记可能不准确 |
+| todo status=completed 仍在 rpiv/todo/ 中 | 异常: 已完成的 todo 应归档 → `/rpiv_loop:archive rpiv/todo/{name}.md` |
 | exec-report 存在但 Plan 不是 completed | 异常: 执行报告先于计划完成 |
 
 输出: 仅列出异常项,无异常则输出 `✓ 全部一致,无异常`

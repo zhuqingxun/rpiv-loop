@@ -18,9 +18,13 @@ description: 修复手动/AI 代码审查中发现的问题的流程
 所有修复完成后：
 
 1. 运行验证命令（参见 commands/validate.md）以完成修复
-2. **回写审查文档闭环**：打开原始代码审查文件，将每个问题的 `status` 更新为：
+2. **回写审查文档闭环**：打开原始代码审查文件，将每个问题的 `status` 更新为以下三种之一（禁止存在无归属的 skipped 状态）：
    - `fixed` — 已修复的问题
-   - `skipped` — 有意跳过的问题，在 `status` 行下方追加 `skip_reason: [原因]`
-3. 更新审查文件 frontmatter：
-   - `status` 更新为 `completed`（所有问题均已 fixed 或 skipped 即视为完成）
+   - `wont_fix` — 评估后决定不修复的问题，在 `status` 行下方追加 `wont_fix_reason: [原因]`（如：风格偏好、设计意图、已被其他修复覆盖、影响极低等）
+   - `deferred` — 当前无法修复但需要后续跟踪的问题，在 `status` 行下方追加 `deferred_reason: [原因]`，并**必须在 `rpiv/todo/` 下创建对应的待办文件**跟踪
+3. **闭环校验**：逐项检查，确保每个问题都有明确结论：
+   - 所有 `deferred` 项在 `rpiv/todo/` 下有对应文件
+   - 不存在仍为 `open` 或空白 status 的问题
+4. 更新审查文件 frontmatter：
+   - `status` 更新为 `completed`（所有问题均已 fixed / wont_fix / deferred 即视为完成）
    - `updated_at` 更新为当前时间

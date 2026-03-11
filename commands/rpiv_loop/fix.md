@@ -114,10 +114,17 @@ argument-hint: <issue-file-path>
    - `status: completed`
    - `updated_at: 当前时间`
 
-### 阶段 6：完成引导
+### 阶段 6：归档与引导
 
-输出修复总结后，提示：
-- 如需归档此条目：`/rpiv_loop:archive rpiv/todo/{name}.md`
+修复完成后，**自动归档**已完成的 todo 文件（不要仅建议用户手动归档）：
+
+1. 创建 `rpiv/archive/` 目录（如不存在）
+2. 更新 frontmatter：`status: archived`，添加 `archived_at: 当前时间`，更新 `updated_at`
+3. 移动文件到 `rpiv/archive/`（如有同名则加时间戳后缀，如 `issue-bug.20260311_120000.md`）
+4. 验证移动成功（目标存在、源已删除）
+5. 输出："已归档到 `rpiv/archive/{name}.md`"
+
+然后输出修复总结。
 
 ## 特殊情况处理
 
