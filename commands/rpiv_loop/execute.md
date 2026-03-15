@@ -130,8 +130,20 @@ argument-hint: [path-to-plan]
    - 对每个失败，判断：是一次性问题（环境、网络）还是暴露了可复用的模式（编码规范、框架用法、项目约定）？
    - 如果发现可复用的模式，在输出报告的"建议"章节中明确建议更新哪个文件（项目 CLAUDE.md / 计划模板 / 其他）
    - 这一步不超过 2 分钟，不要过度分析
-3. 提示用户："执行已完成。计划文件已标记为完成。"
-4. 建议下一步："建议 `/clear` 后执行验证流程：`/rpiv_loop:validation:code-review` → `/rpiv_loop:validation:execution-report` → `/rpiv_loop:validation:system-review`"
+3. **归档已完成的关联文件**：
+   - 从计划文件名提取 feature-name（如 `plan-foo.md` → `foo`）
+   - 扫描以下位置的关联文件：
+     - `rpiv/todo/*-{feature-name}.md`
+     - `rpiv/requirements/prd-{feature-name}.md`
+     - `rpiv/` 根目录下的 `brainstorm-summary-{feature-name}.md`、`research-{feature-name}.md`
+   - 对每个 status=completed 或 status=superseded 的关联文件，执行归档：
+     - 更新 frontmatter：status→archived，添加 `archived_at`，更新 `updated_at`
+     - 移动到 `rpiv/archive/`（有同名文件则添加时间戳后缀）
+     - 验证移动成功（目标存在、源已删除）
+   - 对计划文件自身执行相同归档操作
+   - 对 status 不是 completed/superseded 的关联文件，在报告中标注警告但不归档
+4. 提示用户："执行已完成。计划及关联文件已归档。"
+5. 建议下一步："建议 `/clear` 后执行验证流程：`/rpiv_loop:validation:code-review` → `/rpiv_loop:validation:execution-report` → `/rpiv_loop:validation:system-review`"
 
 ## 备注
 
